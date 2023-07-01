@@ -569,10 +569,10 @@ class Miniterm(object):
             self.upload_file()
         elif c in '\x08hH?':                    # CTRL+H, h, H, ? -> Show help
             sys.stderr.write(self.get_help_text())
-        elif c == '\x12':                       # CTRL+R -> Toggle RTS
+        elif c == '\x12':                       # CTRL+R -> toggle RTS
             self.serial.rts = not self.serial.rts
             sys.stderr.write('--- RTS {} ---\n'.format('active' if self.serial.rts else 'inactive'))
-        elif c == '\x04':                       # CTRL+D -> Toggle DTR
+        elif c == '\x04':                       # CTRL+D -> toggle DTR
             self.serial.dtr = not self.serial.dtr
             sys.stderr.write('--- DTR {} ---\n'.format('active' if self.serial.dtr else 'inactive'))
         elif c == '\x02':                       # CTRL+B -> toggle BREAK condition
