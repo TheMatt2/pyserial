@@ -135,7 +135,7 @@ if os.name == 'nt':  # noqa
             self._saved_icp = ctypes.windll.kernel32.GetConsoleCP()
             ctypes.windll.kernel32.SetConsoleOutputCP(65001)
             ctypes.windll.kernel32.SetConsoleCP(65001)
-            # ANSI handling available through SetConsoleMode since Windows 10 v1511 
+            # ANSI handling available through SetConsoleMode since Windows 10 v1511
             # https://en.wikipedia.org/wiki/ANSI_escape_code#cite_note-win10th2-1
             if platform.release() == '10' and int(platform.version().split('.')[2]) > 10586:
                 ENABLE_VIRTUAL_TERMINAL_PROCESSING = 0x0004
@@ -595,6 +595,8 @@ class Miniterm(object):
             self.change_encoding()
         elif c == '\x09':                       # CTRL+I -> info
             self.dump_port_settings()
+        elif c == '\x0b':                       # CTRL+K -> clear console
+            self.console.write('\x1b[H\x1b[J')  # Reset cursor and clear screen
         #~ elif c == '\x01':                       # CTRL+A -> cycle escape mode
         #~ elif c == '\x0c':                       # CTRL+L -> cycle linefeed mode
         elif c in 'pP':                         # P -> change port
@@ -791,6 +793,7 @@ class Miniterm(object):
 ---    {upload:7} Upload file (prompt will be shown)
 ---    {repr:7} encoding
 ---    {filter:7} edit filters
+---    {clear:7} clear console
 --- Toggles:
 ---    {rts:7} RTS   {dtr:7} DTR   {brk:7} BREAK
 ---    {echo:7} echo  {eol:7} EOL
@@ -814,6 +817,7 @@ class Miniterm(object):
            upload=key_description('\x15'),
            repr=key_description('\x01'),
            filter=key_description('\x06'),
+           clear=key_description('\x0b'),
            eol=key_description('\x0c'))
 
 
