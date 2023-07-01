@@ -569,10 +569,10 @@ class Miniterm(object):
             self.upload_file()
         elif c in '\x08hH?':                    # CTRL+H, h, H, ? -> Show help
             sys.stderr.write(self.get_help_text())
-        elif c == '\x12':                       # CTRL+R -> Toggle RTS
+        elif c == '\x12':                       # CTRL+R -> toggle RTS
             self.serial.rts = not self.serial.rts
             sys.stderr.write('--- RTS {} ---\n'.format('active' if self.serial.rts else 'inactive'))
-        elif c == '\x04':                       # CTRL+D -> Toggle DTR
+        elif c == '\x04':                       # CTRL+D -> toggle DTR
             self.serial.dtr = not self.serial.dtr
             sys.stderr.write('--- DTR {} ---\n'.format('active' if self.serial.dtr else 'inactive'))
         elif c == '\x02':                       # CTRL+B -> toggle BREAK condition
@@ -789,6 +789,7 @@ class Miniterm(object):
 --- Menu keys:
 ---    {menu:7} Send the menu character itself to remote
 ---    {exit:7} Send the exit character itself to remote
+---    {help:7} Show this help
 ---    {info:7} Show info
 ---    {upload:7} Upload file (prompt will be shown)
 ---    {repr:7} encoding
@@ -799,16 +800,18 @@ class Miniterm(object):
 ---    {echo:7} echo  {eol:7} EOL
 ---
 --- Port settings ({menu} followed by the following):
----    p          change port
+---    P          change port
+---    B          change baud rate
+---    Z          suspend port
 ---    7 8        set data bits
 ---    N E O S M  change parity (None, Even, Odd, Space, Mark)
 ---    1 2 3      set stop bits (1, 2, 1.5)
----    b          change baud rate
----    x X        disable/enable software flow control
----    r R        disable/enable hardware flow control
+---    x X        software flow control (disable, enable)
+---    r R        hardware flow control (disable, enable)
 """.format(version=getattr(serial, 'VERSION', 'unknown version'),
            exit=key_description(self.exit_character),
            menu=key_description(self.menu_character),
+           help=key_description('\x08'),
            rts=key_description('\x12'),
            dtr=key_description('\x04'),
            brk=key_description('\x02'),
